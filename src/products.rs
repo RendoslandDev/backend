@@ -1,9 +1,8 @@
-// In your main.rs or products.rs module
+
 use actix_web::{get, web, HttpResponse, Responder};
 use serde::Serialize;
 use serde_json::json;
 use std::sync::Mutex;
-
 #[derive(Debug, Clone, Serialize)]
 pub struct Product {
     id: String,
@@ -13,17 +12,14 @@ pub struct Product {
     description: String,
     link:String,
     category:i64
-    // Add other product fields as needed
 }
 
-// This would be part of your AppState
 pub struct ProductStore {
     products: Mutex<Vec<Product>>,
 }
 
 impl ProductStore {
     pub fn new() -> Self {
-        // Initialize with some sample products
         let products = vec![
             Product {
                 id: "1".to_string(),

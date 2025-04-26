@@ -13,7 +13,7 @@ pub struct EmailService {
 
 impl EmailService {
     pub fn new() -> Result<Self, String> {
-        let host = env::var("SMTP_HOST").map_err(|_| "sandbox.smtp.mailtrap.io")?;
+        let host = env::var("SMTP_HOST").map_err(|_| "smpt.gmail.com")?;
         let port = env::var("SMTP_PORT")
             .map_err(|_| "587")?
             .parse::<u16>()

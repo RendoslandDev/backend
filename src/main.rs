@@ -12,6 +12,8 @@ use serde_json::json;
 use actix_cors::Cors;
 
 
+
+
 use products::{ProductStore,get_products_with_limit,get_product_by_id, get_products_by_category,get_all_products};
 
 
@@ -22,8 +24,15 @@ mod email;
 mod products;
 
 
+
+
+
+
+
+
+
 #[derive(Debug, Deserialize, Serialize)]
-pub struct ContactForm {
+pub  struct ContactForm {
     pub name: String,
     pub email: String,
     pub phone: Option<String>,
