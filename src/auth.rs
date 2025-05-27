@@ -50,8 +50,7 @@ pub fn validate_token(token: &str) -> bool {
 }
 
 pub fn authenticate(login: &LoginRequest) -> Result<String, String> {
-    // In a real app, verify against your user database
-    if login.username == "admin" && login.password == "admin123" {
+    if login.username == "rendosland" && login.password == "Migraine69" {
         create_token(&login.username)
     } else {
         Err("Invalid credentials".to_string())

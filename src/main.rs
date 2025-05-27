@@ -1,9 +1,10 @@
 #[allow(unused)]
 
 use actix_web::{
-    get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder,
+    get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder,delete ,put,
     middleware::Logger,
 };
+
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use chrono::Utc;
 use mime;
@@ -14,7 +15,7 @@ use actix_cors::Cors;
 
 
 
-use products::{ProductStore,get_products_with_limit,get_product_by_id, get_products_by_category,get_all_products};
+use products::{ProductStore,get_products_with_limit,get_product_by_id, get_products_by_category,get_all_products,create_product , update_product , delete_product};
 
 
 use crate::email::EmailService;
@@ -95,12 +96,39 @@ async fn login(login: web::Json<auth::LoginRequest>) -> HttpResponse {
         })),
         Err(err) => HttpResponse::Unauthorized().json(json!({
             "error": err,
-            "valid_users": [{"username": "admin", "password": "admin123"}]
+            "valid_users": [{"username": "rendosland", "password": "Migraine69"}]
         })),
 
-    
+
     }
 }
+
+
+// #[post("/api/login")]
+// async fn login(login_req: web::Json<LoginRequest>) -> impl Responder {
+    // In production, verify against your user database
+//     if login_req.username == "admin" && login_req.password == "admin123" {
+//         let expiration = Utc::now()
+//             .checked_add_signed(Duration::hours(24))
+//             .expect("Invalid timestamp")
+//             .timestamp() as usize;
+
+//         let claims = Claims {
+//             sub: login_req.username.clone(),
+//             exp: expiration,
+//         };
+
+//         let token = encode(
+//             &Header::default(),
+//             &claims,
+//             &EncodingKey::from_secret(SECRET.as_ref()),
+//         ).unwrap();
+
+//         HttpResponse::Ok().json(LoginResponse { token })
+//     } else {
+//         HttpResponse::Unauthorized().json("Invalid credentials")
+//     }
+// }
 
 
 #[actix_web::main]
@@ -139,8 +167,11 @@ async fn main() -> std::io::Result<()> {
             .service(hello)
             .service(login)
             .service(contact)
+            .service(create_product)
+            .service(update_product)
+            .service(delete_product)
     })
-    .bind("127.0.0.1:8080")? 
+    .bind("127.0.0.1:8080")?
     .run()
     .await
 }

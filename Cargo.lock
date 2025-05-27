@@ -345,6 +345,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio",
+ "uuid 1.16.0",
 ]
 
 [[package]]
@@ -1481,7 +1482,7 @@ dependencies = [
  "lettre 0.9.6",
  "mime",
  "time 0.1.45",
- "uuid",
+ "uuid 0.7.4",
 ]
 
 [[package]]
@@ -2672,6 +2673,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90dbc611eb48397705a6b0f6e917da23ae517e4d127123d2cf7674206627d32a"
 dependencies = [
  "rand 0.6.5",
+]
+
+[[package]]
+name = "uuid"
+version = "1.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "458f7a779bf54acc9f347480ac654f68407d3aab21269a6e3c9f922acd9e2da9"
+dependencies = [
+ "getrandom 0.3.2",
 ]
 
 [[package]]
