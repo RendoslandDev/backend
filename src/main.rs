@@ -11,6 +11,7 @@ use mime;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use actix_cors::Cors;
+use dotenv;
 
 
 
@@ -171,7 +172,7 @@ async fn main() -> std::io::Result<()> {
             .service(update_product)
             .service(delete_product)
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }

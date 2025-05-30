@@ -46,7 +46,7 @@ pub fn validate_token(token: &str) -> bool {
         token,
         &DecodingKey::from_secret(secret.as_ref()),
         &Validation::new(Algorithm::HS256),
-    ).is_ok()
+    ).is_ok() 
 }
 
 pub fn authenticate(login: &LoginRequest) -> Result<String, String> {
