@@ -1,30 +1,19 @@
-FROM rust:latest as builder
+FROM rust:1.83.0-slim as builder
 
-WORKDIR /usr/src/app
-COPY . .
-
-RUN cargo install --path .
-
-
-# Runtime stage
-FROM debian:bullseye-slim
-
-RUN apt-get update && apt-get install -y \
-    libssl-dev \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=builder /usr/local/cargo/bin/my-backend /usr/local/bin/backend
-
-ENV PORT=8080
-EXPOSE $PORT
+WORKDIR /usr/src/backend
 
 COPY Cargo.toml Cargo.lock ./
-COPY src ./src
-RUN cargo build --release
+
 COPY . .
+RUN cargo build --release
 
+COPY src ./src
 
-CMD["backend"]
+RUN cargo build --release
 
+FROM debian:bookworm-slim
 
+COPY --from=builder /usr/src/backend/target/release/backend /usr/local/bin/backend
+
+EXPOSE 8080
+CMD ["backend"]

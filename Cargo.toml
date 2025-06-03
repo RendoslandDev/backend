@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 actix-web = "4"
+actix-session = { version = "0.8", features = ["cookie-session"]}
 actix-web-httpauth = "0.7"  # For BearerAuth
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

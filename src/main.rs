@@ -4,6 +4,7 @@ use actix_web::{
     get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder,delete ,put,
     middleware::Logger,
 };
+use actix_session::Session;
 
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use chrono::Utc;
@@ -104,32 +105,20 @@ async fn login(login: web::Json<auth::LoginRequest>) -> HttpResponse {
     }
 }
 
+#[post("/logout")]
+ pub async fn logout(session: Session) -> impl Responder {
+    // Clear all session data
+    // session.purge();
 
-// #[post("/api/login")]
-// async fn login(login_req: web::Json<LoginRequest>) -> impl Responder {
-    // In production, verify against your user database
-//     if login_req.username == "admin" && login_req.password == "admin123" {
-//         let expiration = Utc::now()
-//             .checked_add_signed(Duration::hours(24))
-//             .expect("Invalid timestamp")
-//             .timestamp() as usize;
+    // Or if you want to just remove specific values:
+    session.remove("user_id");
+    session.remove("username");
 
-//         let claims = Claims {
-//             sub: login_req.username.clone(),
-//             exp: expiration,
-//         };
+    HttpResponse::Ok().json(serde_json::json!({
+        "message": "Logged out successfully"
+    }))
 
-//         let token = encode(
-//             &Header::default(),
-//             &claims,
-//             &EncodingKey::from_secret(SECRET.as_ref()),
-//         ).unwrap();
-
-//         HttpResponse::Ok().json(LoginResponse { token })
-//     } else {
-//         HttpResponse::Unauthorized().json("Invalid credentials")
-//     }
-// }
+}
 
 
 #[actix_web::main]
@@ -161,6 +150,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .app_data(email_service.clone())
             .app_data(product_store.clone())
+            .service(logout)
             .service(get_products_with_limit)
             .service(get_product_by_id)
             .service(get_products_by_category)
