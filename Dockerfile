@@ -1,19 +1,23 @@
-FROM rust:1.83.0-slim as builder
+# syntax=docker/dockerfile:1.4
 
-WORKDIR /usr/src/backend
+FROM rust:1.85 AS builder
 
-COPY Cargo.toml Cargo.lock ./
-
+WORKDIR /app
 COPY . .
-RUN cargo build --release
 
-COPY src ./src
+RUN apt-get update && \
+    apt-get install -y openssl libssl-dev pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN cargo build --release
 
 FROM debian:bookworm-slim
 
-COPY --from=builder /usr/src/backend/target/release/backend /usr/local/bin/backend
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y libssl3 openssl && \
+    rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8080
+COPY --from=builder /app/target/release/backend /usr/local/bin/
+
 CMD ["backend"]
